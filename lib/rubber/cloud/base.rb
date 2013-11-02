@@ -130,7 +130,6 @@ module Rubber
         instance = scoped_env.rubber_instances[host]
         instance.security_groups.each do |group_name|
           group = groups[group_name]
-
           group['rules'].each do |rule|
             protocol = rule['protocol']
             from_port = rule.has_key?('from_port') ? rule['from_port'].to_i : nil
@@ -138,6 +137,7 @@ module Rubber
             source_ips = rule['source_ips']
 
             if protocol && source_ips
+              source_ips = source_ips.split(',') if source_ips.class == String
               source_ips.each do |source|
                 if from_port && to_port
                   if from_port != to_port
